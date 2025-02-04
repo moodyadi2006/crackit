@@ -31,36 +31,26 @@ const AdminPage = () => {
   const [uploadedTestButtonPanel, setUploadedTestButtonPanel] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      event.preventDefault();
-      event.returnValue = "";
-    };
-    const handleBackButton = () => {
-      window.history.pushState(null, "", window.location.href);
-    };
-    const disableKeys = (event) => {
-      if (event.ctrlKey && ["r", "R"].includes(event.key))
-        event.preventDefault();
-      if (event.keyCode === 123) event.preventDefault(); // Disable F12
-    };
+useEffect(() => {
+  const handleBeforeUnload = (event) => {
+    event.preventDefault();
+    event.returnValue = "";
+  };
 
-    // Add event listeners
-    window.addEventListener("beforeunload", handleBeforeUnload);
+  const handleBackButton = () => {
     window.history.pushState(null, "", window.location.href);
-    window.addEventListener("popstate", handleBackButton);
-    document.addEventListener("keydown", disableKeys);
-    document.addEventListener("contextmenu", (event) => event.preventDefault());
+  };
 
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      window.removeEventListener("popstate", handleBackButton);
-      document.removeEventListener("keydown", disableKeys);
-      document.removeEventListener("contextmenu", (event) =>
-        event.preventDefault()
-      );
-    };
-  }, []);
+  // Add event listeners
+  window.addEventListener("beforeunload", handleBeforeUnload);
+  window.history.pushState(null, "", window.location.href);
+  window.addEventListener("popstate", handleBackButton);
+
+  return () => {
+    window.removeEventListener("beforeunload", handleBeforeUnload);
+    window.removeEventListener("popstate", handleBackButton);
+  };
+}, []);
 
   useEffect(() => {
     if (localStorage.getItem("accessToken")) {
