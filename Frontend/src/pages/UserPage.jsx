@@ -181,6 +181,7 @@ const UserPage = () => {
         localStorage.setItem("refreshToken", data.refreshToken);
         alert("User Logged In successfully");
       }
+            setUser(localStorage.getItem("profile"));
       setIsLoginPanelOpen(false);
     } catch (error) {
       if (error.response?.status === 400) {
@@ -217,6 +218,7 @@ const UserPage = () => {
         localStorage.setItem("refreshToken", data.refreshToken);
         alert("User registered successfully");
       }
+      setUser(localStorage.getItem("profile"));
       setIsSignupPanelOpen(false);
     } catch (error) {
       console.log(error);
