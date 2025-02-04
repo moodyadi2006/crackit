@@ -27,7 +27,7 @@ const AdminPage = () => {
   const [testUploadPanel, setTestUploadPanel] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [isSomeoneLoggedIn, setIsSomeoneLoggedIn] = useState(false);
-  const [admin, setAdmin] = useState(localStorage.getItem("profile"));
+  let [admin, setAdmin] = useState(localStorage.getItem("profile"));
   const [uploadedTestButtonPanel, setUploadedTestButtonPanel] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -167,6 +167,7 @@ useEffect(() => {
         localStorage.setItem("refreshToken", data.refreshToken);
         alert("Admin Logged In succesfully");
       }
+      setAdmin(localStorage.getItem("profile"));
       setIsLoginPanelOpen(false);
     } catch (error) {
       if (error.response?.status === 400) {
@@ -203,6 +204,7 @@ useEffect(() => {
         localStorage.setItem("refreshToken", data.refreshToken);
         alert("Admin registered succesfully");
       }
+            setAdmin(localStorage.getItem("profile"));
       setIsSignupPanelOpen(false);
     } catch (error) {
       if (error.response?.status === 400) {
