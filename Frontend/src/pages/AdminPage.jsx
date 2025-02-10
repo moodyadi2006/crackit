@@ -250,8 +250,17 @@ useEffect(() => {
       setTestUploadPanel(false);
       alert("Test uploaded Successfully");
     } catch (error) {
-      console.error("Error uploading test:", error);
-      alert("Failed to upload test");
+      if(error.response.status === 404){
+        console.error("Instructor does not exist");
+        alert("Instructor does not exist");
+      }else if(error.response.status === 401){
+        console.error("Invalid CSV format");
+        alert("Invalid CSV format");
+      }else if(error.response.status === 400){
+        console.error("Invalid exam type");
+        alert("Invalid exam type");
+      }
+      
     }
   };
 
