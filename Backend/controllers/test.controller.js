@@ -17,45 +17,78 @@ if (!fs.existsSync(uploadDir)) {
 const upload = multer({ dest: uploadDir });
 
 const processCSV = async (req, res) => {
+  console.log(req.file);
   const { testName, testDate, instructor, examType, testTime } = req.body;
+  
   try {
     if (!req.file) {
       return res.status(400).json(new ApiError(400, "No file uploaded"));
+    }
+
+    // Set max questions based on examType
+    let maxQuestions;
+    if (examType === "JEE") {
+      maxQuestions = 90;
+    } else if (examType === "NEET") {
+      maxQuestions = 180;
+    } else {
+      return res.status(400).json(new ApiError(400, "Invalid exam type"));
     }
 
     const questions = [];
     const options = [];
     const answers = [];
 
-    // Process CSV file using Promise
     await new Promise((resolve, reject) => {
+      let count = 0; // Track the number of valid questions processed
+
       fs.createReadStream(req.file.path)
         .pipe(csv())
         .on("data", (row) => {
+          // Stop processing after maxQuestions limit
+          if (count >= maxQuestions) return;
+
+          // Validate row fields
           if (
-            !row.question ||
-            !row.option1 ||
-            !row.option2 ||
-            !row.option3 ||
-            !row.option4 ||
-            !row.correctAnswer
+            !row.question?.trim() ||
+            !row.option1?.trim() ||
+            !row.option2?.trim() ||
+            !row.option3?.trim() ||
+            !row.option4?.trim() ||
+            !row.correctAnswer?.trim()
           ) {
-            reject(new Error("CSV format is incorrect"));
+            console.error("Skipping invalid row:", row);
+             return res
+        .status(401)
+        .json(new ApiError(401, "Invalid CSV format"));
             return;
           }
 
           questions.push(row.question);
           options.push([row.option1, row.option2, row.option3, row.option4]);
           answers.push(row.correctAnswer);
+          count++;
         })
-        .on("end", resolve)
-        .on("error", reject);
+        .on("end", () => {
+
+          // Ensure exactly maxQuestions are provided
+          if (count !== maxQuestions) {
+            reject(new Error(`Expected ${maxQuestions} questions, but got ${count}`));
+            return;
+          }
+
+          resolve();
+        })
+        .on("error", (err) => {
+          console.error("CSV Read Error:", err);
+          reject(err);
+        });
     });
+
 
     const formattedAnswers = answers.map((answer) =>
       answer.includes(",") ? answer.split(",") : [answer]
     );
-
     const Instructor = await Admin.findById(instructor);
     if (!Instructor) {
       return res
@@ -96,6 +129,7 @@ const processCSV = async (req, res) => {
       .json(new ApiError(500, error.message || "Error processing CSV file"));
   }
 };
+
 
 const getAllTests = asyncHandler(async (req, res) => {
   try {
