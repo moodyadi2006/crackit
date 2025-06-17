@@ -2,8 +2,6 @@
 > Personalized JEE/NEET Preparation Platform  
 > 🚀 Built as part of the NSS, IIT Roorkee Open Project
 
-![CrackItHub Banner](https://user-images.githubusercontent.com/your-banner.png)
-
 ## 🌟 Overview
 
 **CrackItHub** is a full-stack web platform designed to simulate real JEE/NEET test environments. It enables students to take subject-wise mock tests, track their performance with deep analytics, and prepare efficiently with personalized feedback.  
@@ -45,7 +43,7 @@
 | Database     | MongoDB (Mongoose ODM)                |
 | API Testing  | Postman                               |
 | Charts       | Chart.js / Recharts                   |
-| Deployment   | Render / Vercel / Railway (configurable) |
+| Deployment   | Render / Vercel |
 
 ---
 
@@ -104,14 +102,13 @@ Crackit/
 
 ## 🌐 Live Demo
 
-🔗 [CrackItHub](https://crackit-1.onrender.com/) *(Update with actual deployment URL)*
+🔗 [CrackItHub](https://crackit-1.onrender.com/)
 
 ---
 
 ## ✍️ Authors & Contributions
 
 * 👨‍💻 [Aditya Singh](https://github.com/moodyadi2006)
-* 🤝 ISC Contributors, IIT Roorkee
 * 📢 NSS Open Project Team, IIT Roorkee
 
 ---
